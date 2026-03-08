@@ -61,15 +61,17 @@ if ($ZipUrl) {
 
     # Google Drive 대용량 confirm 우회
     if ($ZipUrl -match "drive\.google\.com") {
-        $fileId = if ($ZipUrl -match "id=([^&]+)") { $Matches[1] }
-                  elseif ($ZipUrl -match "/d/([^/]+)") { $Matches[1] }
-                  else { $ZipUrl }
-        $resp = Invoke-WebRequest "https://drive.google.com/uc?export=download&id=$fileId" -SessionVariable gSession -UseBasicParsing
+        $fileId = $ZipUrl
+        if ($ZipUrl -match 'id=([^&]+)') { $fileId = $Matches[1] }
+        elseif ($ZipUrl -match '/d/([^/]+)') { $fileId = $Matches[1] }
+        $gdUrl = "https://drive.google.com/uc?export=download&id=$fileId"
+        $resp = Invoke-WebRequest $gdUrl -SessionVariable gSession -UseBasicParsing
         $confirm = ([regex]'confirm=([0-9A-Za-z_]+)').Match($resp.Content).Groups[1].Value
         if ($confirm) {
-            Invoke-WebRequest "https://drive.google.com/uc?export=download&confirm=$confirm&id=$fileId" -WebSession $gSession -OutFile $zipPath -UseBasicParsing
+            $gdUrl2 = "https://drive.google.com/uc?export=download&confirm=$confirm&id=$fileId"
+            Invoke-WebRequest $gdUrl2 -WebSession $gSession -OutFile $zipPath -UseBasicParsing
         } else {
-            Invoke-WebRequest "https://drive.google.com/uc?export=download&id=$fileId" -OutFile $zipPath -UseBasicParsing
+            Invoke-WebRequest $gdUrl -OutFile $zipPath -UseBasicParsing
         }
     } else {
         Invoke-WebRequest $ZipUrl -OutFile $zipPath -UseBasicParsing
