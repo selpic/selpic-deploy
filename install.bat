@@ -47,7 +47,13 @@ if /i not "%CONFIRM%"=="Y" (
 )
 
 echo.
-powershell -ExecutionPolicy Bypass -File "%~dp0install.ps1" -BranchCode "%BRANCH_CODE%"
+
+:: ps1이 같은 폴더에 있으면 사용, 없으면 GitHub에서 다운로드
+if exist "%~dp0install.ps1" (
+    powershell -ExecutionPolicy Bypass -File "%~dp0install.ps1" -BranchCode "%BRANCH_CODE%"
+) else (
+    powershell -ExecutionPolicy Bypass -Command "& { $ps = \"$env:TEMP\selpic_install.ps1\"; Invoke-WebRequest 'https://raw.githubusercontent.com/selpic/selpic-deploy/main/install.ps1' -OutFile $ps -UseBasicParsing; & $ps -BranchCode '%BRANCH_CODE%'; Remove-Item $ps -ErrorAction SilentlyContinue }"
+)
 
 echo.
 echo     아무 키나 누르면 닫힙니다.

@@ -2,7 +2,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$BranchCode,
     [string]$InstallDir = "C:\SELPIC",
-    [string]$ZipUrl = ""
+    [string]$ZipUrl = "https://github.com/selpic/selpic-deploy/releases/latest/download/selpic3.zip"
 )
 
 $ErrorActionPreference = "Stop"
