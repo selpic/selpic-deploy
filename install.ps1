@@ -1,4 +1,3 @@
-#Requires -RunAsAdministrator
 param(
     [Parameter(Mandatory=$true)][string]$BranchCode,
     [string]$InstallDir = "C:\SELPIC",

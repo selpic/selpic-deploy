@@ -1,4 +1,3 @@
-#Requires -RunAsAdministrator
 param(
     [string]$InstallDir = "C:\SELPIC",
     [string]$ZipUrl = "https://github.com/selpic/selpic-deploy/releases/latest/download/selpic3.zip"
