@@ -52,7 +52,7 @@ echo.
 if exist "%~dp0install.ps1" (
     powershell -ExecutionPolicy Bypass -File "%~dp0install.ps1" -BranchCode "%BRANCH_CODE%"
 ) else (
-    powershell -ExecutionPolicy Bypass -Command "& { $ps = \"$env:TEMP\selpic_install.ps1\"; Invoke-WebRequest 'https://raw.githubusercontent.com/selpic/selpic-deploy/main/install.ps1' -OutFile $ps -UseBasicParsing; & $ps -BranchCode '%BRANCH_CODE%'; Remove-Item $ps -ErrorAction SilentlyContinue }"
+    powershell -ExecutionPolicy Bypass -Command "& { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $ps = \"$env:TEMP\selpic_install.ps1\"; Invoke-WebRequest 'https://raw.githubusercontent.com/selpic/selpic-deploy/main/install.ps1' -OutFile $ps -UseBasicParsing; & $ps -BranchCode '%BRANCH_CODE%'; Remove-Item $ps -ErrorAction SilentlyContinue }"
 )
 
 echo.
